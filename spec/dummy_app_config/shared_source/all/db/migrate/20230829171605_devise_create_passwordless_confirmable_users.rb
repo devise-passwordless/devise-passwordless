@@ -39,7 +39,7 @@ class DeviseCreatePasswordlessConfirmableUsers < ActiveRecord::Migration[6.0]
 
     add_index :passwordless_users, :email,                unique: true
     # add_index :passwordless_users, :reset_password_token, unique: true
-    add_index :passwordless_users, :confirmation_token,   unique: true
+    # add_index :passwordless_users, :confirmation_token,   unique: true
     # add_index :passwordless_users, :unlock_token,         unique: true
   end
 end
