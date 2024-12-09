@@ -13,7 +13,7 @@ module Devise::Passwordless
     def self.decode(token, resource_class)
       resource = GlobalID::Locator.locate_signed(token, for: "login")
       raise ExpiredTokenError unless resource
-      raise InvalidTokenError if resource.class != resource_class
+      raise InvalidTokenError if resource.class <= resource_class
       [resource, {}]
     end
   end
