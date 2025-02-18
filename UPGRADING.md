@@ -140,4 +140,4 @@ to have a successful upgrade:
   re-rendering the sign-in form.
   * [See the README][after-magic-link-sent-readme] for details on how to customize the redirect behavior
 
-[after-magic-link-sent-readme]: https://github.com/device-passwordless/devise-passwordless#redirecting-after-magic-link-is-sent
+[after-magic-link-sent-readme]: https://github.com/devise-passwordless/devise-passwordless#redirecting-after-magic-link-is-sent
