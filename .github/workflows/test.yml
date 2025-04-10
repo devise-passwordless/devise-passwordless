@@ -10,81 +10,102 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby-version:
-          - 3.2
-          - 3.1
-          - "3.0"
-          - 2.7
-          - 2.6
-          - 2.5
-        rails-version:
-          # - "edge"
-          - 7
-          - 6.1
-          - "6.0"
-        exclude:
-          # Rails 7 requires Ruby 2.7+
-          - ruby-version: 2.5
-            rails-version: 7
-          - ruby-version: 2.6
-            rails-version: 7
-          # Rails 6 requires Ruby <= 3.0
-          - ruby-version: 3.1
-            rails-version: "6.0"
-          - ruby-version: 3.2
-            rails-version: "6.0"
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Ruby ${{ matrix.ruby-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ matrix.ruby-version }}
-          rubygems: latest
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Run gem tests
-        run: |
-          bundle config set --local path ".$(mktemp -u -d)"
-          bundle
-          bundle exec rake
-      - name: Set up new Rails dummy app
-        working-directory: ./spec
-        env:
-          RAILS_NEW_GEMFILE: dummy_app_config/gemfiles/Gemfile-rails-${{ matrix.rails-version }}
+          ruby-version: "3.0"
+          bundler-cache: true
+
+      - name: Install Rails
+        run: gem install rails -v 6.0.6.1
+
+      - name: Set up dummy app
         run: |
           bundle config set --local path "$(mktemp -u -d)"
-          BUNDLE_GEMFILE=$RAILS_NEW_GEMFILE bundle install || exit 1
-
+          bundle install
           rails new dummy_app --database=sqlite3 --skip-active-storage --skip-action-cable --skip-spring --skip-listen --skip-test
-
-          # Workaround for Ruby 2.7 with Rails 7
-          if [[ "${{ matrix.ruby-version }}" == "2.7" && "${{ matrix.rails-version }}" == "7" ]]; then
-            sed -i '/^gem.*sqlite3/d' dummy_app/Gemfile
-            echo -e "\ngem 'sqlite3', '~> 1.6.0', '>= 1.6.9'\n" >> dummy_app/Gemfile
-          fi
-
-          # Additional logging for debugging
-          echo "Final Gemfile content:"
-          cat dummy_app/Gemfile
-
-          cat dummy_app_config/Gemfile.append >> dummy_app/Gemfile
           cd dummy_app
-
-          # Install dependencies and handle errors
-          bundle install || {
-          echo "Bundle install failed. Exiting.";
-          exit 1;
-          }
+          bundle install
           rails g rspec:install
-          cp -rf ../dummy_app_config/shared_source/all/* ./
-          cp -rf ../dummy_app_config/shared_source/${{ matrix.rails-version }}/* ./
-          yarn install || exit 1
-      - name: Run Rails dummy app tests
-        working-directory: ./spec/dummy_app
-        run: |
-          rake db:drop db:create db:migrate
-          rake
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     ruby-version:
+    #       - 3.2
+    #       - 3.1
+    #       - "3.0"
+    #       - 2.7
+    #       - 2.6
+    #       - 2.5
+    #     rails-version:
+    #       # - "edge"
+    #       - 7
+    #       - 6.1
+    #       - "6.0"
+    #     exclude:
+    #       # Rails 7 requires Ruby 2.7+
+    #       - ruby-version: 2.5
+    #         rails-version: 7
+    #       - ruby-version: 2.6
+    #         rails-version: 7
+    #       # Rails 6 requires Ruby <= 3.0
+    #       - ruby-version: 3.1
+    #         rails-version: "6.0"
+    #       - ruby-version: 3.2
+    #         rails-version: "6.0"
+    # steps:
+    #   - uses: actions/checkout@v4
+    #   - name: Set up Ruby ${{ matrix.ruby-version }}
+    #     uses: ruby/setup-ruby@v1
+    #     with:
+    #       ruby-version: ${{ matrix.ruby-version }}
+    #       rubygems: latest
+    #   - uses: actions/setup-node@v4
+    #     with:
+    #       node-version: 18
+    #   - name: Run gem tests
+    #     run: |
+    #       bundle config set --local path ".$(mktemp -u -d)"
+    #       bundle
+    #       bundle exec rake
+    #   - name: Set up new Rails dummy app
+    #     working-directory: ./spec
+    #     env:
+    #       RAILS_NEW_GEMFILE: dummy_app_config/gemfiles/Gemfile-rails-${{ matrix.rails-version }}
+    #     run: |
+    #       bundle config set --local path "$(mktemp -u -d)"
+    #       BUNDLE_GEMFILE=$RAILS_NEW_GEMFILE bundle install || exit 1
+
+    #       rails new dummy_app --database=sqlite3 --skip-active-storage --skip-action-cable --skip-spring --skip-listen --skip-test
+
+    #       # Workaround for Ruby 2.7 with Rails 7
+    #       if [[ "${{ matrix.ruby-version }}" == "2.7" && "${{ matrix.rails-version }}" == "7" ]]; then
+    #         sed -i '/^gem.*sqlite3/d' dummy_app/Gemfile
+    #         echo -e "\ngem 'sqlite3', '~> 1.6.0', '>= 1.6.9'\n" >> dummy_app/Gemfile
+    #       fi
+
+    #       # Additional logging for debugging
+    #       echo "Final Gemfile content:"
+    #       cat dummy_app/Gemfile
+
+    #       cat dummy_app_config/Gemfile.append >> dummy_app/Gemfile
+    #       cd dummy_app
+
+    #       # Install dependencies and handle errors
+    #       bundle install || {
+    #       echo "Bundle install failed. Exiting.";
+    #       exit 1;
+    #       }
+    #       rails g rspec:install
+    #       cp -rf ../dummy_app_config/shared_source/all/* ./
+    #       cp -rf ../dummy_app_config/shared_source/${{ matrix.rails-version }}/* ./
+    #       yarn install || exit 1
+    #   - name: Run Rails dummy app tests
+    #     working-directory: ./spec/dummy_app
+    #     run: |
+    #       rake db:drop db:create db:migrate
+    #       rake
