@@ -71,7 +71,7 @@ jobs:
 
           cat dummy_app_config/Gemfile.append >> dummy_app/Gemfile
           cd dummy_app
-          bundle
+          bundle install
           rails g rspec:install
           cp -rf ../dummy_app_config/shared_source/all/* ./
           cp -rf ../dummy_app_config/shared_source/${{ matrix.rails-version }}/* ./
