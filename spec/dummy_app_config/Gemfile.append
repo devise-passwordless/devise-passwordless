@@ -10,3 +10,9 @@ end
 # to the controllers works in every order.
 gem "devise-passwordless", :path => "../../../"
 gem "devise"
+
+# concurrent-ruby 1.3.5 causes `rails new` in versions <= 7.0 to fail with an
+# ActiveSupport::LoggerThreadSafeLevel::Logger exception.
+# This is fixed in Rails 7.1+.
+# We intentionally avoid the broken version of this dependency.
+gem 'concurrent-ruby', '!= 1.3.5'
