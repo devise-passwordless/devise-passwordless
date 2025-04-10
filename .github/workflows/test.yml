@@ -23,14 +23,33 @@ jobs:
       - name: Install Rails
         run: gem install rails -v 6.0.6.1
 
-      - name: Set up dummy app
+      - name: Install SQLite3
+        run: gem install sqlite3 -v "~> 1.6.0"
+
+      - name: Bundle install
         run: |
           bundle config set --local path "$(mktemp -u -d)"
-          bundle install
+          bundle install || { echo "First bundle install failed" }
+
+      - name: Debug environment
+        run: |
+          ruby -v
+          gem list
+          bundle config
+
+      - name: Set up dummy app
+        run: |
           rails new dummy_app --database=sqlite3 --skip-active-storage --skip-action-cable --skip-spring --skip-listen --skip-test
           cd dummy_app
-          bundle install
-          rails g rspec:install
+          bundle install || { echo "Bundle install failed" }
+          rails g rspec:install || { echo "Rspec setup failed" }
+
+    - name: Run Rails dummy app tests
+        working-directory: ./spec/dummy_app
+        run: |
+          rake db:drop db:create db:migrate
+          rake
+
     # strategy:
     #   fail-fast: false
     #   matrix:
