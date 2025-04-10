@@ -26,16 +26,16 @@ jobs:
       - name: Install SQLite3
         run: gem install sqlite3 -v "~> 1.6.0"
 
-      - name: Bundle install
-        run: |
-          bundle config set --local path "$(mktemp -u -d)"
-          bundle install || { echo "First bundle install failed" }
-
       - name: Debug environment
         run: |
           ruby -v
           gem list
           bundle config
+
+      - name: Bundle install
+        run: |
+          #bundle config set --local path "$(mktemp -u -d)"
+          bundle install || { echo "First bundle install failed" }
 
       - name: Set up dummy app
         run: |
