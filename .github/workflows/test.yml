@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.1"
           bundler-cache: true
 
       - name: Install Rails
-        run: gem install rails -v 6.0.6.1
+        run: gem install rails -v 7.0.0
 
       - name: Install SQLite3
         run: gem install sqlite3 -v "~> 1.6.0"
@@ -44,7 +44,7 @@ jobs:
           bundle install || { echo "Bundle install failed" }
           rails g rspec:install || { echo "Rspec setup failed" }
 
-    - name: Run Rails dummy app tests
+      - name: Run Rails dummy app tests
         working-directory: ./spec/dummy_app
         run: |
           rake db:drop db:create db:migrate
