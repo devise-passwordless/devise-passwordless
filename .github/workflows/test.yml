@@ -34,7 +34,7 @@ jobs:
 
       - name: Bundle install
         run: |
-          #bundle config set --local path "$(mktemp -u -d)"
+          bundle config set --local path "$(mktemp -u -d)"
           bundle install || { echo "First bundle install failed" }
 
       - name: Set up dummy app
