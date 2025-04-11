@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Passwordless (email-only) login strategy for Devise}
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/abevoelker/devise-passwordless"
+  spec.homepage      = "https://github.com/device-passwordless/devise-passwordless"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
 
   spec.post_install_message = %q{
   Devise Passwordless v1.0 introduces major, backwards-incompatible changes!
-  Please see https://github.com/abevoelker/devise-passwordless/blob/master/UPGRADING.md
+  Please see https://github.com/device-passwordless/devise-passwordless/blob/main/UPGRADING.md
   for a guide on upgrading, or CHANGELOG.md for a list of changes.
   }
 end

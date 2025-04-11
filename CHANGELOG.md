@@ -41,12 +41,12 @@
 [@thimo]: https://github.com/thimo
 [@til]: https://github.com/til
 
-[#13]: https://github.com/abevoelker/devise-passwordless/issues/13
-[#19]: https://github.com/abevoelker/devise-passwordless/pull/19
-[#21]: https://github.com/abevoelker/devise-passwordless/pull/21
-[#22]: https://github.com/abevoelker/devise-passwordless/issues/22
-[#23]: https://github.com/abevoelker/devise-passwordless/pull/23
-[#27]: https://github.com/abevoelker/devise-passwordless/pull/27
-[#33]: https://github.com/abevoelker/devise-passwordless/pull/33
-[#36]: https://github.com/abevoelker/devise-passwordless/pull/36
-[#39]: https://github.com/abevoelker/devise-passwordless/issues/39
+[#13]: https://github.com/device-passwordless/devise-passwordless/issues/13
+[#19]: https://github.com/device-passwordless/devise-passwordless/pull/19
+[#21]: https://github.com/device-passwordless/devise-passwordless/pull/21
+[#22]: https://github.com/device-passwordless/devise-passwordless/issues/22
+[#23]: https://github.com/device-passwordless/devise-passwordless/pull/23
+[#27]: https://github.com/device-passwordless/devise-passwordless/pull/27
+[#33]: https://github.com/device-passwordless/devise-passwordless/pull/33
+[#36]: https://github.com/device-passwordless/devise-passwordless/pull/36
+[#39]: https://github.com/device-passwordless/devise-passwordless/issues/39
