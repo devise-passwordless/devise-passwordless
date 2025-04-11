@@ -2,9 +2,9 @@ name: test
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -18,24 +18,25 @@ jobs:
           - 3.1
           - "3.0"
           - 2.7
-          - 2.6
-          - 2.5
         rails-version:
           # - "edge"
-          - 7
+          - 7.1
+          - "7.0"
           - 6.1
-          - "6.0"
         exclude:
-          # Rails 7 requires Ruby 2.7+
-          - ruby-version: 2.5
-            rails-version: 7
-          - ruby-version: 2.6
-            rails-version: 7
-          # Rails 6 requires Ruby <= 3.0
+          # Rails 8 requires Ruby 3.2.0 or newer
           - ruby-version: 3.1
-            rails-version: "6.0"
+            rails-version: "edge"
+          - ruby-version: 3.0
+            rails-version: "edge"
+          - ruby-version: 2.7
+            rails-version: "edge"
+          # Rails 7.0 and 7.1 requires Ruby 2.7.0 or newer
+          # Rails 6 requires Ruby <= 3.0
           - ruby-version: 3.2
-            rails-version: "6.0"
+            rails-version: 6.1
+          - ruby-version: 3.1
+            rails-version: 6.1
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby ${{ matrix.ruby-version }}
@@ -54,11 +55,23 @@ jobs:
       - name: Set up new Rails dummy app
         working-directory: ./spec
         env:
-          RAILS_NEW_GEMFILE: dummy_app_config/gemfiles/Gemfile-rails-${{ matrix.rails-version }}
+          BUNDLE_GEMFILE: dummy_app_config/gemfiles/Gemfile-rails-${{ matrix.rails-version }}
         run: |
+
+          # Install Rails
+          # Create a 
+          # BUNDLE_GEMFILE points bundler to the correct Gemfile
           bundle config set --local path ".$(mktemp -u -d)"
-          BUNDLE_GEMFILE=$RAILS_NEW_GEMFILE bundle
-          rails new dummy_app --database=sqlite3 --skip-active-storage --skip-action-cable --skip-spring --skip-listen --skip-test
+          bundle
+
+          # Create a new dummy_app
+          # `bundle exec` is required to ensure bundler uses the gem specifications in BUNDLE_GEMFILE
+          # This fixes a bug where a previous test run may install a different Rails version which
+          # bundler will use.
+          # We skip running bundle install. This fixes a different bug where `rails new` will fail in 
+          # some versions of Rails (e.g. 7.0.8.7) due to a bug in an ActiveSupport dependency, 
+          # concurrent-ruby. This is fixed in Rails 7.1, but persists in the latest releases of 7.0.
+          bundle exec rails new dummy_app --database=sqlite3 --skip-active-storage --skip-action-cable --skip-spring --skip-listen --skip-test --skip-bundle --skip-git
 
           # XXX VERY DUMB workaround for Rails 7's "rails new" default Gemfile not working with Ruby 2.7
           # e.g. https://github.com/abevoelker/devise-passwordless/actions/runs/8132843679/job/22223730812#step:7:292
@@ -69,12 +82,20 @@ jobs:
             echo -e "\ngem 'sqlite3', '~> 1.6.0', '>= 1.6.9'\n" >> dummy_app/Gemfile
           fi
 
+          # Copy project gems into the dummy_app
           cat dummy_app_config/Gemfile.append >> dummy_app/Gemfile
+
+          # Unset BUNDLE_GEMFILE so that bundler now uses the Gemfile in our dummy_app
+          unset BUNDLE_GEMFILE
           cd dummy_app
+
           bundle
-          rails g rspec:install
+          bundle exec rails g rspec:install --force
           cp -rf ../dummy_app_config/shared_source/all/* ./
           cp -rf ../dummy_app_config/shared_source/${{ matrix.rails-version }}/* ./
+
+          # Install Yarn globally so that Rails bin/setup command can find Yarn, if needed.
+          npm install --global yarn
           yarn install
       - name: Run Rails dummy app tests
         working-directory: ./spec/dummy_app
