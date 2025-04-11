@@ -15,7 +15,7 @@ A passwordless login strategy for [Devise] using emailed magic links
 
 We're currently looking for volunteers to help maintain this library! [See here for details][call-for-maintainers].
 
-[call-for-maintainers]: https://github.com/abevoelker/devise-passwordless/discussions/64
+[call-for-maintainers]: https://github.com/device-passwordless/devise-passwordless/discussions/64
 
 ## 0.x to 1.0 Upgrade
 
@@ -24,7 +24,7 @@ We're currently looking for volunteers to help maintain this library! [See here 
 If you're upgrading from 0.x to 1.0, read [the upgrade guide][] for
 a list of changes you'll need to make.
 
-[the upgrade guide]: https://github.com/abevoelker/devise-passwordless/blob/master/UPGRADING.md
+[the upgrade guide]: https://github.com/device-passwordless/devise-passwordless/blob/main/UPGRADING.md
 
 ## Installation
 
