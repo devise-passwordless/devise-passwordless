@@ -16,7 +16,7 @@ class Devise::MagicLinksController < DeviseController
 
   def auth_options
     mapping = Devise.mappings[resource_name]
-    { scope: resource_name, recall: "#{mapping.controllers[:sessions]}#new" }
+    {scope: resource_name, recall: "#{mapping.controllers[:sessions]}#new"}
   end
 
   def translation_scope
