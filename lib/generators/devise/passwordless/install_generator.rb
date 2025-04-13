@@ -14,6 +14,7 @@ module Devise::Passwordless
       def update_devise_initializer
         inject_into_file "config/initializers/devise.rb", before: /^end$/ do
           <<~CONFIG.indent(2)
+
             # ==> Configuration for :magic_link_authenticatable
 
             # Need to use a custom Devise mailer in order to send magic links.
