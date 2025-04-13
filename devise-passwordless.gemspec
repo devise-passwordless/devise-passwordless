@@ -6,12 +6,12 @@ require "devise/passwordless/version"
 Gem::Specification.new do |spec|
   spec.name          = "devise-passwordless"
   spec.version       = Devise::Passwordless::VERSION
-  spec.authors       = ["Abe Voelker"]
-  spec.email         = ["_@abevoelker.com"]
+  spec.authors       = ["Abe Voelker", "Jennifer Konikowski"]
+  spec.email         = ["_@abevoelker.com", "passwordless@jmkoni.com"]
 
   spec.summary       = %q{Passwordless (email-only) login strategy for Devise}
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com/device-passwordless/devise-passwordless"
+  spec.homepage      = "https://github.com/devise-passwordless/devise-passwordless"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -33,11 +33,12 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "devise"
   spec.add_dependency "globalid"
+  spec.add_development_dependency "standard"
   spec.add_development_dependency "timecop"
 
   spec.post_install_message = %q{
   Devise Passwordless v1.0 introduces major, backwards-incompatible changes!
-  Please see https://github.com/device-passwordless/devise-passwordless/blob/main/UPGRADING.md
+  Please see https://github.com/devise-passwordless/devise-passwordless/blob/main/UPGRADING.md
   for a guide on upgrading, or CHANGELOG.md for a list of changes.
   }
 end
