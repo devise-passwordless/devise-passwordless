@@ -10,10 +10,10 @@ module Devise::Passwordless
         data: {
           resource: {
             key: resource.to_key,
-            email: resource.email,
-          },
+            email: resource.email
+          }
         },
-        created_at: now.to_f,
+        created_at: now.to_f
       }
       data[:data][:extra] = extra if extra
       data[:expires_at] = expires_at.to_f if expires_at

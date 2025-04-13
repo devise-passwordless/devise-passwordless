@@ -12,19 +12,19 @@ module Devise
 
     ALL.insert (options[:insert_at] || -1), module_name
 
-    if strategy = options[:strategy]
+    if (strategy = options[:strategy])
       strategy = ((strategy == true) ? module_name : strategy)
       STRATEGIES[module_name] = strategy
     end
 
-    if controller = options[:controller]
+    if (controller = options[:controller])
       controller = ((controller == true) ? module_name : controller)
       CONTROLLERS[module_name] = controller
     end
 
     NO_INPUT << strategy if options[:no_input]
 
-    if route = options[:route]
+    if (route = options[:route])
       routes = {}
 
       case route

@@ -10,7 +10,9 @@ require "devise/passwordless/tokenizers/signed_global_id_tokenizer"
 module Devise
   module Passwordless
     class InvalidOrExpiredTokenError < StandardError; end
+
     class InvalidTokenError < InvalidOrExpiredTokenError; end
+
     class ExpiredTokenError < InvalidOrExpiredTokenError; end
 
     def self.deprecator
@@ -31,14 +33,12 @@ module Devise
                             "leak out of your logs."
 
     def self.check_filter_parameters(params)
-      begin
-        unless params.find{|p| p.to_sym == :token}
-          warn FILTER_PARAMS_WARNING
-        end
-      # Cancel the check if filter_parameters contains regular expressions or other exotic values
-      rescue NoMethodError
-        return
+      unless params.find { |p| p.to_sym == :token }
+        warn FILTER_PARAMS_WARNING
       end
+    # Cancel the check if filter_parameters contains regular expressions or other exotic values
+    rescue NoMethodError
+      nil
     end
   end
 end
