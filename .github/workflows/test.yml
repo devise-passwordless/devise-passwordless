@@ -28,11 +28,11 @@ jobs:
         exclude:
           # Rails 8 requires Ruby 3.2.0 or newer
           - ruby-version: 3.1
-            rails-version: "edge"
+            rails-version: "8.0"
           - ruby-version: 3.0
-            rails-version: "edge"
+            rails-version: "8.0"
           - ruby-version: 2.7
-            rails-version: "edge"
+            rails-version: "8.0"
           # Rails 7.0 and 7.1 requires Ruby 2.7.0 or newer
           # Rails 6 requires Ruby <= 3.0
           - ruby-version: 3.2
