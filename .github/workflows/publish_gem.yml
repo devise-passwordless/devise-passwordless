@@ -19,6 +19,8 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rake
+    - name: Run linter
+      run: bundle exec standardrb
     - name: Publish gem
       uses: dawidd6/action-publish-gem@v1
       with:

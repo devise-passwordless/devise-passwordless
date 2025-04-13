@@ -6,8 +6,8 @@ module Devise::Passwordless
       Devise.add_module(:magic_link_authenticatable, {
         model: true,
         strategy: true,
-        route: { magic_link: [nil, :show], session: [nil, :new, :destroy] },
-        controller: :sessions,
+        route: {magic_link: [nil, :show], session: [nil, :new, :destroy]},
+        controller: :sessions
       })
     end
 

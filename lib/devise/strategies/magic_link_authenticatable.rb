@@ -7,8 +7,8 @@ require "devise/passwordless/login_token"
 module Devise
   module Strategies
     class MagicLinkAuthenticatable < Authenticatable
-      #undef :password
-      #undef :password=
+      # undef :password
+      # undef :password=
       attr_accessor :token
 
       def valid_for_http_auth?
@@ -32,7 +32,7 @@ module Devise
         if validate(resource)
           remember_me(resource)
           resource.after_magic_link_authentication
-          env['warden.magic_link_extra'] = extra.fetch('data', {}).delete('extra')
+          env["warden.magic_link_extra"] = extra.fetch("data", {}).delete("extra")
           success!(resource)
         else
           fail!(:magic_link_invalid)
@@ -47,7 +47,7 @@ module Devise
         self.token = auth_values[:token]
 
         parse_authentication_key_values(auth_values, authentication_keys) &&
-        parse_authentication_key_values(request_values, request_keys)
+          parse_authentication_key_values(request_values, request_keys)
       end
     end
   end
