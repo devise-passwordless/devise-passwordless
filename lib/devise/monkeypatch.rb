@@ -3,21 +3,22 @@
 module Devise
   class Mapping
     def routes
-      @routes ||= ROUTES.values_at(*self.modules).compact.flatten.uniq
+      @routes ||= ROUTES.values_at(*modules).compact.flatten.uniq
     end
   end
+
   def self.add_module(module_name, options = {})
     options.assert_valid_keys(:strategy, :model, :controller, :route, :no_input, :insert_at)
 
     ALL.insert (options[:insert_at] || -1), module_name
 
     if strategy = options[:strategy]
-      strategy = (strategy == true ? module_name : strategy)
+      strategy = ((strategy == true) ? module_name : strategy)
       STRATEGIES[module_name] = strategy
     end
 
     if controller = options[:controller]
-      controller = (controller == true ? module_name : controller)
+      controller = ((controller == true) ? module_name : controller)
       CONTROLLERS[module_name] = controller
     end
 
@@ -51,7 +52,7 @@ module Devise
     end
 
     if options[:model]
-      path = (options[:model] == true ? "devise/models/#{module_name}" : options[:model])
+      path = ((options[:model] == true) ? "devise/models/#{module_name}" : options[:model])
       camelized = ActiveSupport::Inflector.camelize(module_name.to_s)
       Devise::Models.send(:autoload, camelized.to_sym, path)
     end

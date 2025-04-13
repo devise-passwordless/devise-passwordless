@@ -1,5 +1,5 @@
-require 'devise/strategies/magic_link_authenticatable'
-require 'devise/hooks/magic_link_authenticatable'
+require "devise/strategies/magic_link_authenticatable"
+require "devise/hooks/magic_link_authenticatable"
 
 module Devise
   module Models
@@ -34,7 +34,7 @@ module Devise
       end
 
       def send_magic_link(remember_me: false, **kwargs)
-        token = self.encode_passwordless_token
+        token = encode_passwordless_token
         send_devise_notification(:magic_link, token, remember_me, **kwargs)
       end
 
@@ -68,15 +68,19 @@ module Devise
 
       module ClassMethods
         def passwordless_tokenizer_class
-          @passwordless_tokenizer_class ||= self.passwordless_tokenizer.is_a?(Class) ? (
-            self.passwordless_tokenizer
-          ) : (
-            self.passwordless_tokenizer.start_with?("::") ? (
-              self.passwordless_tokenizer.constantize
-            ) : (
-              "Devise::Passwordless::#{self.passwordless_tokenizer}".constantize
-            )
-          )
+          @passwordless_tokenizer_class ||= if passwordless_tokenizer.is_a?(Class)
+
+            passwordless_tokenizer
+
+          else
+            (
+                        passwordless_tokenizer.start_with?("::") ? (
+                          passwordless_tokenizer.constantize
+                        ) : (
+                          "Devise::Passwordless::#{passwordless_tokenizer}".constantize
+                        )
+                      )
+          end
         end
 
         def decode_passwordless_token(*args, **kwargs)
@@ -94,9 +98,8 @@ module Devise
         Devise::Models.config(self,
           :passwordless_tokenizer,
           :passwordless_login_within,
-          #:passwordless_secret_key,
-          :passwordless_expire_old_tokens_on_sign_in
-        )
+          # :passwordless_secret_key,
+          :passwordless_expire_old_tokens_on_sign_in)
       end
     end
   end
