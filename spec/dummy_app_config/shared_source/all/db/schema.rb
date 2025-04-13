@@ -65,7 +65,6 @@ ActiveRecord::Schema.define(version: 2023_09_08_215556) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "\"confirmation_token\"", name: "index_passwordless_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_passwordless_users_on_email", unique: true
   end
 
