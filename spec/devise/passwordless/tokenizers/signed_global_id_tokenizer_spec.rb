@@ -153,4 +153,66 @@ RSpec.describe Devise::Passwordless::SignedGlobalIDTokenizer do
       end
     end
   end
+  
+  describe 'encryption and decryption with inheritance support' do
+    let(:secret) { 's3Krit' }
+
+    before do
+      Timecop.freeze(Time.utc(2023, 1, 1))
+      allow(Devise::Passwordless).to receive(:secret_key).and_return(secret)
+      verifier = ActiveSupport::MessageVerifier.new(secret)
+      allow(SignedGlobalID).to receive(:verifier).and_return(verifier)
+
+      # Base User class
+      user = Class.new do
+        include GlobalID::Identification
+
+        attr_accessor :email, :id
+        def email
+          @email
+        end
+
+        def to_key
+          [@id]
+        end
+
+        def self.primary_key
+          :id
+        end
+
+        def self.passwordless_login_within
+          5.minutes
+        end
+      end
+
+      # Subclass of User
+      anonymous_user = Class.new(user)
+
+      allow(GlobalID).to receive(:app).and_return('foo')
+      stub_const('User', user)
+      stub_const('AnonymousUser', anonymous_user)
+    end
+
+    let(:user) { User.new.tap { |x| x.id = 12345; x.email = 'email@example.com' } }
+    let(:anonymous_user) { AnonymousUser.new.tap { |x| x.id = 67890; x.email = 'anon@example.com' } }
+
+    after do
+      Timecop.return
+    end
+
+    context "decoding a subclass resource" do
+      before do
+        allow(User).to receive(:find).and_return(user)
+        allow(AnonymousUser).to receive(:find).and_return(anonymous_user)
+      end
+
+      it "decodes a subclass resource without error" do
+        token = described_class.encode(anonymous_user)
+        resource, data = described_class.decode(token, User)
+
+        expect(resource).to eq(anonymous_user)
+        expect(data).to eq({})
+      end
+    end
+  end
 end
